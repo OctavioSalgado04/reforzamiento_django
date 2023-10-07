@@ -1,0 +1,8 @@
+body{
+    background-color: aqua;
+}
+.nose{
+    background-color: white;
+    display: flexbox;
+    height: auto;
+}
