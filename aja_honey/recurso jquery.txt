@@ -1,0 +1,49 @@
+// En el lado del cliente, usamos jQuery para capturar el evento submit del formulario
+$("#formulario").submit(function(evento){
+    // Evitamos que se recargue la página
+    evento.preventDefault();
+    // Obtenemos los datos del formulario
+    var datos = $(this).serialize();
+    // Hacemos una petición POST al servlet que procesará los datos
+    $.post("ProcesarFormulario", datos, function(respuesta){
+        // Mostramos la respuesta del servidor en un elemento HTML
+        $("#resultado").html(respuesta);
+    });
+});
+
+// En el lado del servidor, creamos un servlet que recibe los datos del formulario y los procesa
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+
+public class ProcesarFormulario extends HttpServlet {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Obtenemos los parámetros del formulario
+        String nombre = request.getParameter("nombre");
+        String email = request.getParameter("email");
+        // Hacemos alguna validación o lógica de negocio con los datos
+        if(nombre.isEmpty() || email.isEmpty()){
+            response.setContentType("text/html");
+            response.getWriter().println("Por favor, rellena todos los campos");
+        } else {
+            response.setContentType("text/html");
+            response.getWriter().println("Gracias por enviar el formulario, " + nombre);
+        }
+    }
+}
+
+
+-----html-----
+
+<form id="formulario" action="recibir.php" method="post">
+  <input type="text" placeholder="Escribe tu nombre" name="nombre" required autofocus title="Ingresa tu nombre porfavor">
+  <input type="number" placeholder="Ingresa tu edad" name="edad" required title="Ingresa tu edad porfavor">
+  <br><br>
+  <input type="submit" id="btnEnviar" name="btnEnviar" value="Enviar formulario">
+</form>
+<hr>
+<p class="respuesta">
+<p>
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="js/enviar.js"></script>
+
